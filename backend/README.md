@@ -14,8 +14,8 @@ REST API backend for the golf league application, providing persistent storage u
 
 1. Create virtual environment and install dependencies:
 ```bash
-python -m venv venv
-source venv/bin/activate
+/usr/bin/python3 -m venv .venv
+source .venv/bin/activate
 pip install -e .
 ```
 

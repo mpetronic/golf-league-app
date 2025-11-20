@@ -3,17 +3,40 @@
 This application is designed to manage a golf league, including tracking scores, handicaps, players,
 teams, and standings for players and teams and managing courses.
 
-## Running the App
+## Development
 
 The application is a single page application that runs in the browser. The backend is a local
 SQLite3 database behind a Python REST API that runs in a separate process. Both must be running for
 the application to function.
 
-    # In first terminal
-    cd backend && source venv/bin/activate && python app.py
+1. In one terminal, setup the backend Python REST server by creating a virtual environment and
+   installing dependencies in editable mode.
 
-    # In second terminal
-    npm run dev
+        cd backend
+        /usr/bin/python3 -m venv .venv
+        source .venv/bin/activate
+        pip install -e .[dev]
+
+1. Start up the REST debug server.
+
+        python app.py
+
+1. In a different terminal, setup npm from the project root folder and start the development server.
+
+        npm install
+        npm run dev
+
+## Running the App
+
+This assumes you have already done the steps under Development first.
+
+1. In one terminal:
+
+        cd backend && source .venv/bin/activate && python app.py
+
+1. In a second terminal:
+
+        npm run dev
 
 ## Building the App
 
