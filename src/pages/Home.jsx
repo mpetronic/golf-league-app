@@ -39,7 +39,7 @@ export default function Home() {
       <div className="relative z-10 p-6">
         <div className="mb-8">
           <h2 className="text-3xl font-bold text-white">Dashboard</h2>
-          <p className="text-gray-300 mt-1">Welcome to the Fairway League</p>
+          <p className="text-gray-300 mt-1">Welcome to the Hughes Golf League</p>
         </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">

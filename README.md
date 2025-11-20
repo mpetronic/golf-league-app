@@ -1,4 +1,20 @@
-# React + Vite
+# Golf League App
+
+This application is designed to manage a golf league, including tracking scores, handicaps, and standings for players and teams.
+
+## Running the App
+
+    npm run dev
+
+## Building the App
+
+    npm run build
+
+## Deploying the App
+
+    npm run deploy
+
+## React + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
