@@ -1,9 +1,18 @@
 # Golf League App
 
-This application is designed to manage a golf league, including tracking scores, handicaps, and standings for players and teams.
+This application is designed to manage a golf league, including tracking scores, handicaps, players,
+teams, and standings for players and teams and managing courses.
 
 ## Running the App
 
+The application is a single page application that runs in the browser. The backend is a local
+SQLite3 database behind a Python REST API that runs in a separate process. Both must be running for
+the application to function.
+
+    # In first terminal
+    cd backend && source venv/bin/activate && python app.py
+
+    # In second terminal
     npm run dev
 
 ## Building the App
