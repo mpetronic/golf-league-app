@@ -1,13 +1,33 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Plus, Search, Edit, Trash2, Users } from 'lucide-react';
 import PlayerEditor from '../components/PlayerEditor';
-import { players as initialPlayers, teams } from '../data/mockData';
+import { teams } from '../data/mockData';
+import dataService from '../api/dataService';
 
 export default function Admin() {
-  const [players, setPlayers] = useState(initialPlayers);
+  const [players, setPlayers] = useState([]);
   const [isEditing, setIsEditing] = useState(false);
   const [currentPlayer, setCurrentPlayer] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
+  const [loading, setLoading] = useState(true);
+
+  // Load players from backend on mount
+  useEffect(() => {
+    loadPlayers();
+  }, []);
+
+  const loadPlayers = async () => {
+    try {
+      setLoading(true);
+      const data = await dataService.getPlayers();
+      setPlayers(data);
+    } catch (error) {
+      console.error('Failed to load players:', error);
+      alert('Failed to load players. Please check if the backend server is running.');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleAdd = () => {
     setCurrentPlayer(null);
@@ -19,19 +39,35 @@ export default function Admin() {
     setIsEditing(true);
   };
 
-  const handleDelete = (id) => {
+  const handleDelete = async (id) => {
     if (confirm('Are you sure you want to delete this player?')) {
-      setPlayers(players.filter(p => p.id !== id));
+      try {
+        await dataService.deletePlayer(id);
+        setPlayers(players.filter(p => p.id !== id));
+      } catch (error) {
+        console.error('Failed to delete player:', error);
+        alert('Failed to delete player.');
+      }
     }
   };
 
-  const handleSave = (playerData) => {
-    if (playerData.id) {
-      setPlayers(players.map(p => p.id === playerData.id ? playerData : p));
-    } else {
-      setPlayers([...players, { ...playerData, id: `p${Date.now()}` }]);
+  const handleSave = async (playerData) => {
+    try {
+      if (playerData.id) {
+        // Update existing player
+        await dataService.updatePlayer(playerData.id, playerData);
+        setPlayers(players.map(p => p.id === playerData.id ? playerData : p));
+      } else {
+        // Create new player
+        const newPlayer = { ...playerData, id: `p_${Date.now()}` };
+        await dataService.createPlayer(newPlayer);
+        setPlayers([...players, newPlayer]);
+      }
+      setIsEditing(false);
+    } catch (error) {
+      console.error('Failed to save player:', error);
+      alert('Failed to save player.');
     }
-    setIsEditing(false);
   };
 
   const getTeamName = (teamId) => teams.find(t => t.id === teamId)?.name || 'Unassigned';
@@ -49,6 +85,14 @@ export default function Admin() {
         onSave={handleSave}
         onCancel={() => setIsEditing(false)}
       />
+    );
+  }
+
+  if (loading) {
+    return (
+      <div className="p-6">
+        <div className="text-white text-center">Loading players...</div>
+      </div>
     );
   }
 
