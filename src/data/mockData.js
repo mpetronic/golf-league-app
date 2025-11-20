@@ -52,11 +52,11 @@ export const players = [
     id: 'p2', 
     name: 'Jane Smith', 
     teamId: 't1', 
-    handicap: 18, 
+    handicap: 8, 
     history: [
-      { date: '2024-05-07', score: 92, handicapAfter: 18 },
-      { date: '2024-04-30', score: 90, handicapAfter: 18 },
-      { date: '2024-04-23', score: 95, handicapAfter: 18 }
+      { date: '2024-05-07', score: 92, handicapAfter: 8 },
+      { date: '2024-04-30', score: 90, handicapAfter: 8 },
+      { date: '2024-04-23', score: 95, handicapAfter: 8 }
     ] 
   },
   { 
@@ -74,11 +74,11 @@ export const players = [
     id: 'p4', 
     name: 'Alice Brown', 
     teamId: 't2', 
-    handicap: 22, 
+    handicap: 6, 
     history: [
-      { date: '2024-05-07', score: 98, handicapAfter: 22 },
-      { date: '2024-04-30', score: 100, handicapAfter: 22 },
-      { date: '2024-04-23', score: 95, handicapAfter: 22 }
+      { date: '2024-05-07', score: 98, handicapAfter: 6 },
+      { date: '2024-04-30', score: 100, handicapAfter: 6 },
+      { date: '2024-04-23', score: 95, handicapAfter: 6 }
     ] 
   },
 ];

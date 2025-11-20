@@ -66,3 +66,44 @@ export function pairPlayers(team1Players, team2Players) {
   }
   return pairings;
 }
+
+/**
+ * Calculates strokes received on a specific hole based on handicap differential.
+ * The player with the higher handicap receives strokes on the N hardest holes,
+ * where N is the handicap difference.
+ * @param {number} playerHandicap - The player's handicap
+ * @param {number} opponentHandicap - The opponent's handicap
+ * @param {number} holeHandicap - The hole's handicap ranking (1-18, where 1 is hardest)
+ * @returns {number} Number of strokes received on this hole (0 or 1)
+ */
+export function calculateStrokesReceived(playerHandicap, opponentHandicap, holeHandicap) {
+  const handicapDiff = playerHandicap - opponentHandicap;
+  
+  // If player has higher handicap, they receive strokes on the N hardest holes
+  if (handicapDiff > 0) {
+    // They get a stroke on the N hardest holes (holes with handicap rating 1 through N)
+    return holeHandicap <= handicapDiff ? 1 : 0;
+  }
+  
+  // If player has lower or equal handicap, they don't receive strokes
+  return 0;
+}
+
+/**
+ * Calculates points awarded for a hole in match play.
+ * @param {number} player1Net - Player 1's net score
+ * @param {number} player2Net - Player 2's net score
+ * @returns {Object} Points for each player { player1Points, player2Points }
+ */
+export function calculateHolePoints(player1Net, player2Net) {
+  if (player1Net === player2Net) {
+    // Tie - both get 1 point
+    return { player1Points: 1, player2Points: 1 };
+  } else if (player1Net < player2Net) {
+    // Player 1 wins - gets 2 points
+    return { player1Points: 2, player2Points: 0 };
+  } else {
+    // Player 2 wins - gets 2 points
+    return { player1Points: 0, player2Points: 2 };
+  }
+}
