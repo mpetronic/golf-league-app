@@ -1,0 +1,22 @@
+services:
+  mariadb:
+    image: mariadb:11
+    container_name: mariadb-dev
+    restart: unless-stopped
+    environment:
+      MARIADB_ROOT_PASSWORD: admin
+      MARIADB_DATABASE: golf_league
+      MARIADB_USER: admin
+      MARIADB_PASSWORD: admin
+    ports:
+      - "3306:3306"
+    volumes:
+      - mariadb-data:/var/lib/mariadb
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  mariadb-data:
