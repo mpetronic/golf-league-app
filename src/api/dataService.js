@@ -49,6 +49,21 @@ class DataService {
     return apiClient.getCourse(id);
   }
 
+  async createCourse(courseData) {
+    await this.initialize();
+    return apiClient.createCourse(courseData);
+  }
+
+  async updateCourse(id, courseData) {
+    await this.initialize();
+    return apiClient.updateCourse(id, courseData);
+  }
+
+  async deleteCourse(id) {
+    await this.initialize();
+    return apiClient.deleteCourse(id);
+  }
+
   // Team operations
   async getTeams() {
     await this.initialize();

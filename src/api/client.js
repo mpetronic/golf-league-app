@@ -54,6 +54,26 @@ class ApiClient {
     return this.request(`/courses/${id}`);
   }
 
+  async createCourse(courseData) {
+    return this.request('/courses', {
+      method: 'POST',
+      body: JSON.stringify(courseData),
+    });
+  }
+
+  async updateCourse(id, courseData) {
+    return this.request(`/courses/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(courseData),
+    });
+  }
+
+  async deleteCourse(id) {
+    return this.request(`/courses/${id}`, {
+      method: 'DELETE',
+    });
+  }
+
   // Team operations
   async getTeams() {
     return this.request('/teams');

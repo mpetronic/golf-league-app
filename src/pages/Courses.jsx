@@ -1,12 +1,30 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Plus, Edit, Trash2, MapPin } from 'lucide-react';
 import CourseEditor from '../components/CourseEditor';
-import { courses as initialCourses } from '../data/mockData';
+import dataService from '../api/dataService';
 
 export default function Courses() {
-  const [courses, setCourses] = useState(initialCourses);
+  const [courses, setCourses] = useState([]);
   const [isEditing, setIsEditing] = useState(false);
   const [currentCourse, setCurrentCourse] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    loadCourses();
+  }, []);
+
+  const loadCourses = async () => {
+    try {
+      setLoading(true);
+      const data = await dataService.getCourses();
+      setCourses(data);
+    } catch (error) {
+      console.error('Failed to load courses:', error);
+      alert('Failed to load courses.');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleAdd = () => {
     setCurrentCourse(null);
@@ -18,19 +36,33 @@ export default function Courses() {
     setIsEditing(true);
   };
 
-  const handleDelete = (id) => {
+  const handleDelete = async (id) => {
     if (confirm('Are you sure you want to delete this course?')) {
-      setCourses(courses.filter(c => c.id !== id));
+      try {
+        await dataService.deleteCourse(id);
+        setCourses(courses.filter(c => c.id !== id));
+      } catch (error) {
+        console.error('Failed to delete course:', error);
+        alert('Failed to delete course.');
+      }
     }
   };
 
-  const handleSave = (courseData) => {
-    if (courseData.id) {
-      setCourses(courses.map(c => c.id === courseData.id ? courseData : c));
-    } else {
-      setCourses([...courses, { ...courseData, id: `c${Date.now()}` }]);
+  const handleSave = async (courseData) => {
+    try {
+      if (courseData.id) {
+        await dataService.updateCourse(courseData.id, courseData);
+        setCourses(courses.map(c => c.id === courseData.id ? courseData : c));
+      } else {
+        const newCourse = { ...courseData, id: `c${Date.now()}` };
+        await dataService.createCourse(newCourse);
+        setCourses([...courses, newCourse]);
+      }
+      setIsEditing(false);
+    } catch (error) {
+      console.error('Failed to save course:', error);
+      alert('Failed to save course.');
     }
-    setIsEditing(false);
   };
 
   if (isEditing) {
@@ -40,6 +72,14 @@ export default function Courses() {
         onSave={handleSave}
         onCancel={() => setIsEditing(false)}
       />
+    );
+  }
+
+  if (loading) {
+    return (
+      <div className="p-6 text-center text-white">
+        Loading courses...
+      </div>
     );
   }
 
