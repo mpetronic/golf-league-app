@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 from flask import Flask
 from flask_cors import CORS
 from backend.api.routes import api, init_routes
-from backend.storage import Storage
+from backend.storage.sqlite_storage import SQLiteStorage
 
 
 def create_app(dbpath: str):
@@ -19,7 +19,7 @@ def create_app(dbpath: str):
     CORS(app, resources={r"/api/*": {"origins": "*"}})
 
     # Initialize storage
-    storage = Storage(dbpath)
+    storage = SQLiteStorage(dbpath)
     init_routes(storage)
 
     # Register blueprints
