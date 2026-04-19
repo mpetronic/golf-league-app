@@ -1,12 +1,14 @@
-[build-system]
-requires = ["setuptools>=61.0"]
-build-backend = "setuptools.build_meta"
-
 [project]
 name = "golf-league-backend"
-version = "1.0.0"
+dynamic = ["version"]
 description = "REST API backend for golf league application"
-requires-python = ">=3.8"
+requires-python = ">=3.12"
+authors = [{ name = "Mark Petronic", email = "mark.petronic@hughes.com" }]
+classifiers = [
+  "Development Status :: 5 - Production/Stable",
+  "Programming Language :: Python :: 3.12",
+]
+
 dependencies = [
     "flask>=3.0.0",
     "flask-cors>=4.0.0",
@@ -16,9 +18,37 @@ dependencies = [
 packages = ["api", "storage"]
 
 
-[project.optional-dependencies]
-dev = [
-    "pytest>=7.0.0",
-    "black>=23.0.0",
-    "flake8>=6.0.0",
+[project.scripts]
+serve = "backend.app:main"
+
+[build-system]
+requires = ["hatchling", "hatch-vcs"]
+build-backend = "hatchling.build"
+
+[tool.hatch.version]
+source = "vcs"
+
+[tool.hatch.version.raw-options]
+root = ".."
+
+[tool.hatch.build.hooks.vcs]
+version-file = "__version__.py"
+
+[tool.hatch.build.targets.wheel]
+packages = ["backend"]
+
+[tool.hatch.envs.default]
+dependencies = [
+  "mypy>=1.0",
+  "pytest-cov>=4.0",
+  "pytest-mock>=3.10",
+  "pytest>=7.0",
+  "ruff>=0.0.280",
 ]
+
+[tool.hatch.envs.default.scripts]
+test = "pytest --verbose --cov {args}"
+lint = "ruff check . {args}"
+format = "ruff check --select I --fix . && ruff format ."
+typecheck = "mypy backend/"
+build = "hatch run lint && hatch run test && hatch clean && hatch build -t wheel"

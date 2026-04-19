@@ -3,7 +3,7 @@ REST API routes for the golf league application.
 Provides endpoints for CRUD operations on courses, teams, players, and matches.
 """
 from flask import Blueprint, jsonify, request
-from storage import StorageInterface
+from backend.storage import StorageInterface
 
 api = Blueprint('api', __name__)
 storage = None  # Will be injected by app.py

@@ -6,13 +6,13 @@ import sqlite3
 import json
 from typing import List, Dict, Optional
 from pathlib import Path
-from .base import StorageInterface
+from backend.storage.base import StorageInterface
 
 
 class SQLiteStorage(StorageInterface):
     """SQLite implementation of the storage interface."""
     
-    def __init__(self, db_path: str = "backend/database/golf_league.db"):
+    def __init__(self, db_path: str):
         """Initialize SQLite storage with the given database path."""
         self.db_path = db_path
         Path(db_path).parent.mkdir(parents=True, exist_ok=True)

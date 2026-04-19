@@ -40,11 +40,15 @@ This assumes you have already done the steps under Development first.
 
 ## Building the App
 
-    npm run build
+```
+npm run build
+```
 
 ## Deploying the App
 
-    npm run deploy
+```
+npm run deploy
+```
 
 ## React + Vite
 
