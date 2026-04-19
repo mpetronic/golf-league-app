@@ -32,6 +32,31 @@ def get_course(course_id):
     return jsonify({'error': 'Course not found'}), 404
 
 
+@api.route('/courses', methods=['POST'])
+def create_course():
+    """Create a new course."""
+    course_data = request.json
+    course = storage.create_course(course_data)
+    return jsonify(course), 201
+
+
+@api.route('/courses/<course_id>', methods=['PUT'])
+def update_course(course_id):
+    """Update a course."""
+    course_data = request.json
+    course = storage.update_course(course_id, course_data)
+    return jsonify(course)
+
+
+@api.route('/courses/<course_id>', methods=['DELETE'])
+def delete_course(course_id):
+    """Delete a course."""
+    success = storage.delete_course(course_id)
+    if success:
+        return jsonify({'message': 'Course deleted'}), 200
+    return jsonify({'error': 'Course not found'}), 404
+
+
 # Team endpoints
 @api.route('/teams', methods=['GET'])
 def get_teams():

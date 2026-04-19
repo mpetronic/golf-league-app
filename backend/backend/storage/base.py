@@ -20,6 +20,21 @@ class StorageInterface(ABC):
         """Get a specific course by ID."""
         pass
     
+    @abstractmethod
+    def create_course(self, course_data: Dict) -> Dict:
+        """Create a new course."""
+        pass
+    
+    @abstractmethod
+    def update_course(self, course_id: str, course_data: Dict) -> Dict:
+        """Update an existing course."""
+        pass
+    
+    @abstractmethod
+    def delete_course(self, course_id: str) -> bool:
+        """Delete a course."""
+        pass
+    
     # Team operations
     @abstractmethod
     def get_teams(self) -> List[Dict]:

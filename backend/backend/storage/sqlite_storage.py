@@ -100,6 +100,42 @@ class SQLiteStorage(StorageInterface):
         conn.close()
         
         return self._row_to_course(row) if row else None
+
+    def create_course(self, course_data: Dict) -> Dict:
+        """Create a new course."""
+        conn = self._get_connection()
+        cursor = conn.cursor()
+        holes_json = json.dumps(course_data['holes'])
+        cursor.execute(
+            'INSERT INTO courses (id, name, holes) VALUES (?, ?, ?)',
+            (course_data['id'], course_data['name'], holes_json)
+        )
+        conn.commit()
+        conn.close()
+        return course_data
+
+    def update_course(self, course_id: str, course_data: Dict) -> Dict:
+        """Update an existing course."""
+        conn = self._get_connection()
+        cursor = conn.cursor()
+        holes_json = json.dumps(course_data['holes'])
+        cursor.execute(
+            'UPDATE courses SET name = ?, holes = ? WHERE id = ?',
+            (course_data['name'], holes_json, course_id)
+        )
+        conn.commit()
+        conn.close()
+        return {**course_data, 'id': course_id}
+
+    def delete_course(self, course_id: str) -> bool:
+        """Delete a course."""
+        conn = self._get_connection()
+        cursor = conn.cursor()
+        cursor.execute('DELETE FROM courses WHERE id = ?', (course_id,))
+        deleted = cursor.rowcount > 0
+        conn.commit()
+        conn.close()
+        return deleted
     
     def _row_to_course(self, row) -> Dict:
         """Convert database row to course dictionary."""
