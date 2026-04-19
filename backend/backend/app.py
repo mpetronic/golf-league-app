@@ -2,16 +2,15 @@
 Flask application entry point for the golf league REST API.
 """
 
-import os
 from dotenv import load_dotenv
-
 from flask import Flask
 from flask_cors import CORS
+
 from backend.api.routes import api, init_routes
-from backend.storage.sqlite_storage import SQLiteStorage
+from backend.storage import get_storage
 
 
-def create_app(dbpath: str):
+def create_app():
     """Create and configure the Flask application."""
     app = Flask(__name__)
 
@@ -19,7 +18,7 @@ def create_app(dbpath: str):
     CORS(app, resources={r"/api/*": {"origins": "*"}})
 
     # Initialize storage
-    storage = SQLiteStorage(dbpath)
+    storage = get_storage()
     init_routes(storage)
 
     # Register blueprints
@@ -30,12 +29,7 @@ def create_app(dbpath: str):
 
 def main():
     load_dotenv()
-    dbpath = os.getenv("DATABASE_PATH")
-    if not dbpath:
-        raise RuntimeError("DATABASE_PATH environment variable is not set")
-    if not os.path.exists(dbpath):
-        raise RuntimeError(f"Database file does not exist at {dbpath}")
-    app = create_app(dbpath)
+    app = create_app()
     print("Starting Golf League API server on http://localhost:5000")
     print("API endpoints available at http://localhost:5000/api/")
     app.run(debug=True, host="0.0.0.0", port=5000)
